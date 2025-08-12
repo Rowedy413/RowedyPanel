@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Rowedy King Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            margin: 0;
+            padding: 0;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        header {
+            padding: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            padding: 20px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.05);
+        }
+        .dp {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        footer {
+            padding: 15px;
+            font-size: 14px;
+            background: rgba(0,0,0,0.3);
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        footer small {
+            display: block;
+            font-size: 12px;
+            color: #ccc;
+        }
+        /* Rain Effect */
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: transparent;
+            z-index: 1;
+        }
+        .drop {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background: rgba(255,255,255,0.6);
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>OWNER ROWEDY KIING</header>
+    
+    <div class="container">
+        <div class="card" onclick="openSite('https://tokenchackalways.vercel.app')">
+            <img src="https://i.ibb.co/xq6n3Xn/fb.jpg" class="dp">
+            <div class="title">FACEBOOK TOKEN CHECKER</div>
+        </div>
+
+        <div class="card" onclick="openSite('https://gcuid.vercel.app')">
+            <img src="https://i.ibb.co/mHqSfh2/messenger.jpg" class="dp">
+            <div class="title">MESSENGER GROUP UID FINDER</div>
+        </div>
+
+        <div class="card" onclick="openSite('https://pagetokenallways.vercel.app')">
+            <img src="https://i.ibb.co/Qm3yNMv/page.jpg" class="dp">
+            <div class="title">FACEBOOK PAGE TOKEN EXTRACTOR</div>
+        </div>
+
+        <div class="card" onclick="openSite('http://fi9.bot-hosting.net:21584')">
+            <img src="https://i.ibb.co/F0tcjZT/group.jpg" class="dp">
+            <div class="title">GROUP/INBOX CONVO PAGE SERVER</div>
+        </div>
+
+        <div class="card" onclick="openSite('http://fi10.bot-hosting.net:20424')">
+            <img src="https://i.ibb.co/WFd8sHm/post.jpg" class="dp">
+            <div class="title">FACEBOOK POST SERVER</div>
+        </div>
+    </div>
+
+    <footer>
+        Developed by Rowedy Kingh
+        <small>Use for Legends</small>
+    </footer>
+
+    <!-- Rain Effect Container -->
+    <div class="rain"></div>
+
+    <script>
+        function openSite(url) {
+            window.open(url, "_blank");
+        }
+
+        // Generate rain drops
+        const rainContainer = document.querySelector('.rain');
+        for (let i = 0; i < 100; i++) {
+            const drop = document.createElement('div');
+            drop.classList.add('drop');
+            drop.style.left = `${Math.random() * 100}vw`;
+            drop.style.animationDuration = `${0.5 + Math.random() * 1.5}s`;
+            drop.style.animationDelay = `${Math.random() * 2}s`;
+            rainContainer.appendChild(drop);
+        }
+    </script>
+</body>
+</html>
