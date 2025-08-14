@@ -1,9 +1,13 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "server.py", "use": "@vercel/python" }
+  "rewrites": [
+    { "source": "/", "destination": "/login.html" }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "server.py" }
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "OWNER", "value": "ROWEDY" }
+      ]
+    }
   ]
 }
