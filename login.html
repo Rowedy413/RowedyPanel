@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Rain animation canvas */
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+    .card {
+      width: 92%; max-width: 380px;
+      background: rgba(15, 17, 21, 0.85);
+      border: 1px solid #23262d;
+      padding: 22px; border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    p.hint { margin: 0 0 18px; color: #a5adba; font-size: 13px; }
+    label { display:block; font-size: 13px; color:#c8d1e0; margin:10px 0 6px; }
+    input {
+      width:100%; padding:12px 14px; border-radius:10px; border:1px solid #2b2f3a;
+      background:#0b0d11; color:#e6edf7; outline: none;
+    }
+    .row { display:flex; gap:10px; align-items:center; }
+    .toggle { cursor:pointer; font-size:12px; color:#9fb0c7; user-select:none; }
+    .btn {
+      width:100%; padding:12px; margin-top:16px; border:0; border-radius:10px;
+      background:#3b82f6; color:#fff; font-weight:600; cursor:pointer;
+    }
+    .btn:active { transform: translateY(1px); }
+    .err { margin-top:10px; color:#ff6b6b; font-size:13px; min-height:18px; }
+    .foot { margin-top:14px; text-align:center; font-size:12px; color:#8a93a6; }
+
+    /* Glowing header */
+    .glow-header {
+      position: absolute;
+      top: 20px;
+      font-size: 26px;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff7e5f, 0 0 20px #ff7e5f, 0 0 40px #ff7e5f;
+      }
+      to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #feb47b, 0 0 30px #feb47b, 0 0 60px #feb47b;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Rain effect canvas -->
+  <canvas id="rain"></canvas>
+
+  <!-- Glowing Header -->
+  <div class="glow-header">WELCOME BY OWNER ROWEDY KIING</div>
+
+  <!-- Login Card -->
+  <div class="card">
+    <h1>Secure Access</h1>
+    <p class="hint">कृपया लॉगिन करें</p>
+
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input id="username" name="username" autocomplete="username" placeholder="Enter username" required />
+
+      <label for="password">Password</label>
+      <div class="row">
+        <input id="password" name="password" type="password" autocomplete="current-password"
+               placeholder="Enter password" required style="flex:1" />
+        <span id="togglePw" class="toggle">Show</span>
+      </div>
+
+      <button class="btn" type="submit">Login</button>
+      <div id="err" class="err"></div>
+    </form>
+
+    <div class="foot">OWNER: ROWEDY</div>
+  </div>
+
+  <script>
+    // ===== Background image URL =====
+    const backgroundURL = "https://media.giphy.com/media/l0MYB8Ory7Hqefo9a/giphy.gif";
+    document.body.style.backgroundImage = `url('${backgroundURL}')`;
+
+    // ===== Rain Effect =====
+    const canvas = document.getElementById('rain');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const drops = [];
+    for (let i = 0; i < 300; i++) {
+      drops.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        length: Math.random() * 15 + 10,
+        speed: Math.random() * 4 + 2
+      });
+    }
+
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i < drops.length; i++) {
+        let d = drops[i];
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x, d.y + d.length);
+      }
+      ctx.stroke();
+      moveRain();
+    }
+
+    function moveRain() {
+      for (let i = 0; i < drops.length; i++) {
+        let d = drops[i];
+        d.y += d.speed;
+        if (d.y > canvas.height) {
+          d.y = -d.length;
+          d.x = Math.random() * canvas.width;
+        }
+      }
+    }
+
+    function animateRain() {
+      drawRain();
+      requestAnimationFrame(animateRain);
+    }
+    animateRain();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // ===== Login Script =====
+    const VALID_USER = "ROWEDY";
+    const VALID_PASS = "KINGXKING";
+
+    document.getElementById("togglePw").addEventListener("click", () => {
+      const pw = document.getElementById("password");
+      const t = document.getElementById("togglePw");
+      if (pw.type === "password") { pw.type = "text"; t.textContent = "Hide"; }
+      else { pw.type = "password"; t.textContent = "Show"; }
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const u = document.getElementById("username").value.trim();
+      const p = document.getElementById("password").value;
+
+      if (u === VALID_USER && p === VALID_PASS) {
+        sessionStorage.setItem("auth", "true");
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("err").textContent = "गलत username या password.";
+      }
+    });
+
+    ["username","password"].forEach(id => {
+      document.getElementById(id).addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.getElementById("loginForm").requestSubmit();
+      });
+    });
+  </script>
+</body>
+  </html>
