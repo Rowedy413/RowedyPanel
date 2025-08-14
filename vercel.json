@@ -1,0 +1,15 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/login.html" },
+    { "source": "/api/sendOTP", "destination": "/api/sendOTP.js" },
+    { "source": "/api/verifyOTP", "destination": "/api/verifyOTP.js" }
+  ],
+  "headers": [
+    {
+      "source": "/((?!api/).*)",
+      "headers": [
+        { "key": "OWNER", "value": "ROWEDY" }
+      ]
+    }
+  ]
+}
