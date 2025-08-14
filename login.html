@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      padding: 8px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      width: 95%;
+      padding: 8px;
+      margin: 8px 0;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+    .msg {
+      font-size: 0.9em;
+      color: #ff6666;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+
+    <!-- Step 1: Username & Password -->
+    <div id="loginStep">
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <div class="msg" id="loginMsg"></div>
+      <button id="loginBtn">Login</button>
+    </div>
+
+    <!-- Step 2: OTP Verification -->
+    <div id="otpStep" style="display:none;">
+      <button id="sendOtpBtn">Send OTP to Owner (WhatsApp)</button>
+      <div class="msg" id="otpSendMsg"></div>
+
+      <input type="text" id="otp" placeholder="Enter OTP" />
+      <div class="msg" id="verifyMsg"></div>
+      <button id="verifyBtn">Verify OTP</button>
+    </div>
+  </div>
+
+  <script>
+    // Step 1: Check Username & Password
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      if (user === 'ROWEDY' && pass === 'KINGXKING') {
+        document.getElementById('loginStep').style.display = 'none';
+        document.getElementById('otpStep').style.display = 'block';
+      } else {
+        document.getElementById('loginMsg').textContent = 'Invalid username or password';
+      }
+    });
+
+    // Step 2: Send OTP
+    const sendBtn = document.getElementById('sendOtpBtn');
+    sendBtn.addEventListener('click', async () => {
+      sendBtn.disabled = true;
+      document.getElementById('otpSendMsg').textContent = "";
+      document.getElementById('verifyMsg').textContent = "";
+      try {
+        const r = await fetch('/api/sendOTP', { method: 'POST' });
+        const data = await r.json();
+        if (!r.ok || !data.success) throw new Error(data.error || 'Failed');
+        document.getElementById('otpSendMsg').textContent = 'OTP sent to Owner ✅';
+      } catch (err) {
+        document.getElementById('verifyMsg').textContent = 'Error sending OTP: ' + err.message;
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
+
+    // Step 3: Verify OTP
+    const verifyBtn = document.getElementById('verifyBtn');
+    verifyBtn.addEventListener('click', async () => {
+      const code = document.getElementById('otp').value.trim();
+      if (!code) {
+        document.getElementById('verifyMsg').textContent = 'OTP required.';
+        return;
+      }
+      verifyBtn.disabled = true;
+      document.getElementById('verifyMsg').textContent = '';
+      try {
+        const r = await fetch('/api/verifyOTP', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+        const data = await r.json();
+        if (!r.ok || !data.success) throw new Error(data.error || 'Verification failed');
+        sessionStorage.setItem('auth', 'true');
+        location.href = 'index.html';
+      } catch (err) {
+        document.getElementById('verifyMsg').textContent = 'Invalid or expired OTP: ' + err.message;
+      } finally {
+        verifyBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
