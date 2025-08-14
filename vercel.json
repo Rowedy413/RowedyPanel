@@ -1,7 +1,9 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "server.py", "use": "@vercel/python" }
+  ],
   "routes": [
-    { "src": "/", "dest": "index.html" },
-    { "src": "/owner", "dest": "Owner.html" }
+    { "src": "/(.*)", "dest": "server.py" }
   ]
 }
